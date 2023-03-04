@@ -12,22 +12,31 @@ admin.initializeApp({
 
 let db = admin.firestore();
 
+app.use(bodyParser.json());
 
 app.post('/add-joke',(req,res) => {
-    let jokeID = req.query.jokeid;
-    let jokeText = req.query.joketext;
+    let jokeID = req.body.jokeid;
+    let jokeText = req.body.joketext;
+
     console.log(jokeText)
+
     let docRef = db.collection('jokes').doc(jokeID);
     docRef.set({
     joketext: [jokeText]})
     res.send("Joke Added Successfully!!")
 })
 
+app.get('/ryuan', (req, res) => {
+    res.send("helllllllll")
+})
+
 
 app.get('/get-joke', (req, res) => {
-  let docRef = db.collection('jokes').doc('joke1'); // Return a single Joke    
+  let docRef = db.collection('jokes').doc('jokeID'); // Return a single Joke    
   docRef.get().then((doc) => {
     if (doc.exists) {
+        let a = doc.data()
+        console.log(a.jokeID)
         res.send(doc.data());
     } else {
         // doc.data() will be undefined in this case
